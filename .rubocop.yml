@@ -1,0 +1,17 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-performance
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Style/AsciiComments:
+  Enabled:  false
+
+Style/Documentation:
+  Enabled:  false
+
+Rails/HasAndBelongsToMany:
+  Enabled:  false
