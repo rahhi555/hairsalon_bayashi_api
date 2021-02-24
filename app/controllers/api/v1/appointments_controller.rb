@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class AppointmentsController < ApplicationController
-      before_action :set_appointment, only: [:show, :update, :destroy]
+      before_action :set_appointment, only: %i[show update destroy]
 
       # GET /appointments
       def index
@@ -20,7 +22,7 @@ module Api
         @appointment = Appointment.new(appointment_params)
 
         if @appointment.save
-          render json: @appointment, status: :created, location: @appointment
+          render json: @appointment, status: :created, location: api_v1_appointment_url(@appointment.id)
         else
           render json: @appointment.errors, status: :unprocessable_entity
         end
@@ -41,15 +43,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_appointment
-          @appointment = Appointment.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def appointment_params
-          params.require(:appointment).permit(:customer_id, :appointment_on, :remark)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_appointment
+        @appointment = Appointment.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def appointment_params
+        params.require(:appointment).permit(:customer_id, :stylist_id, :appointment_on, :remark)
+      end
     end
   end
 end

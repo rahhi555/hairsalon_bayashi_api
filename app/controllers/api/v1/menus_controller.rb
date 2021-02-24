@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class MenusController < ApplicationController
-      before_action :set_menu, only: [:show, :update, :destroy]
+      before_action :set_menu, only: %i[show update destroy]
 
       # GET /menus
       def index
@@ -20,7 +22,7 @@ module Api
         @menu = Menu.new(menu_params)
 
         if @menu.save
-          render json: @menu, status: :created, location: @menu
+          render json: @menu, status: :created, location: api_v1_menu_url(@menu.id)
         else
           render json: @menu.errors, status: :unprocessable_entity
         end
@@ -41,15 +43,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_menu
-          @menu = Menu.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def menu_params
-          params.require(:menu).permit(:name, :code, :time)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_menu
+        @menu = Menu.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def menu_params
+        params.require(:menu).permit(:name, :code, :time)
+      end
     end
   end
 end

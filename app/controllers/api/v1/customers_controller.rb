@@ -20,7 +20,7 @@ module Api
         @customer = Customer.new(customer_params)
 
         if @customer.save
-          render json: @customer, status: :created, location: api_v1_appointments_url
+          render json: @customer, status: :created, location: api_v1_appointment_url(@customer.id)
         else
           render json: @customer.errors, status: :unprocessable_entity
         end

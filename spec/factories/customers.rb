@@ -1,57 +1,63 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :customer do
-    name { "田中　太郎" }
-    tel { "09088887777" }
-    mail { "mail@example.com" }
+    name { '田中　太郎' }
+    tel { '09088887777' }
+    mail { 'mail@example.com' }
   end
 
-  factory :invalid_customer, class: Customer do
-    name { "" }
-    tel  { "" }
-    mail { "" }
+  factory :invalid_customer, class: 'Customer' do
+    name { '' }
+    tel  { '' }
+    mail { '' }
   end
 
-  factory :update_customer, class: Customer do
-    name { "田中　次郎"}
-    tel  { "09088886666" }
-    mail { "mail@ezweb.ne.jp" }
+  factory :update_customer, class: 'Customer' do
+    name { '田中　次郎' }
+    tel  { '09088886666' }
+    mail { 'mail@ezweb.ne.jp' }
   end
 
-  factory :invalid_customers, class: Customer do
-    name { "田中　三郎" }
-    tel  { "09088885555" }
-    mail { "mail@yahoo.co.jp" }
+  factory :invalid_customers, class: 'Customer' do
+    name { '田中　三郎' }
+    tel  { '09088885555' }
+    mail { 'mail@yahoo.co.jp' }
 
-    trait :name_not_null do
-      name { "" }
+    trait :name_is_blank do
+      name { '' }
     end
 
     trait :name_fifty_over do
-      name { "aaaaaaaaaaaaaaaaaaaaaaa　aaaaaaaaaaaaaaaaaaaaaaaaaaa" }
+      name { 'aaaaaaaaaaaaaaaaaaaaaaa　aaaaaaaaaaaaaaaaaaaaaaaaaaa' }
     end
 
     trait :name_not_space do
-      name { "田中三郎" }
+      name { '田中三郎' }
     end
 
     trait :name_top_space do
-      name { " 田中三郎" }
+      name { ' 田中　三郎' }
     end
 
     trait :name_end_space do
-      name { "田中三郎 "}
+      name { '田中　三郎 ' }
     end
 
     trait :tel_not_number do
-      name { "aaaaaaaaaa" }
+      name { 'aaaaaaaaaa' }
+    end
+
+    trait :tel_less_ten do
+      name { '111111111' }
     end
 
     trait :tel_over_eleven do
-      name { "11111111111" }
+      name { '111111111111' }
     end
 
-    trait :mail_no_atmark do
-      name { "mailyahoo.co.jp" }
+    trait :mail_no_at_mark do
+      name { 'mailyahoo.co.jp' }
     end
   end
 end
