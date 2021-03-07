@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class CustomersController < ApplicationController
-      before_action :set_customer, only: [:show, :update, :destroy]
+      before_action :set_customer, only: %i[show update destroy]
 
       # GET /customers
       def index
@@ -41,15 +43,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_customer
-          @customer = Customer.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def customer_params
-          params.require(:customer).permit(:number, :name, :tel, :mail)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_customer
+        @customer = Customer.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def customer_params
+        params.require(:customer).permit(:number, :name, :tel, :mail, :uid)
+      end
     end
   end
 end

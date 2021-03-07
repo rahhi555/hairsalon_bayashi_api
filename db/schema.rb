@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_125915) do
+ActiveRecord::Schema.define(version: 2021_03_07_134122) do
 
   create_table "appointments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "customer_id", null: false
@@ -36,10 +36,11 @@ ActiveRecord::Schema.define(version: 2021_02_20_125915) do
     t.string "mail", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "uid", null: false
     t.index ["mail"], name: "index_customers_on_mail", unique: true
     t.index ["tel"], name: "index_customers_on_tel", unique: true
-    # t.check_constraint "egexp_like(`mail`,_latin1\\'^[A-Z0-9._%-]+@[A-Z0-9.-]+.[A-Z]{2,4}$\\'", name: "only_mail_address"
-    # t.check_constraint "egexp_like(`tel`,_utf8mb4\\'^0[[:digit:]]{9,10}$\\'", name: "only_phone_number"
+    t.check_constraint "regexp_like(`mail`,_utf8mb4\\'^[A-Z0-9._%-]+@[A-Z0-9.-]+.[A-Z]{2,4}$\\'", name: "only_mail_address"
+    t.check_constraint "regexp_like(`tel`,_utf8mb4\\'^0[[:digit:]]{9,10}$\\'", name: "only_phone_number"
   end
 
   create_table "menus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
