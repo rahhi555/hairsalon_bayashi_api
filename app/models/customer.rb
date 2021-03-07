@@ -12,7 +12,7 @@ class Customer < ApplicationRecord
   validates :name,  presence: { message: 'お客様の名前が未入力です' },
                     length: { maximum: 50, message: 'お客様の名前は50文字が上限です' },
                     format: { with: VALID_NAME_REGEX,
-                              message: '名前は真ん中に全角空白を入れ、そこ以外に空白を使用しないでください' }
+                              message: '名字と名前の間に全角空白を入れ、そこ以外に空白を使用しないでください' }
 
   validates :tel,   presence: { message: '電話番号が未入力です' },
                     uniqueness: { message: 'すでに使用されている電話番号です' },
