@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class RanksController < ApplicationController
-      before_action :set_rank, only: [:show, :update, :destroy]
+      before_action :set_rank, only: %i[show update destroy]
 
       # GET /ranks
       def index
@@ -20,7 +22,7 @@ module Api
         @rank = Rank.new(rank_params)
 
         if @rank.save
-          render json: @rank, status: :created, location: @rank
+          render json: @rank, status: :created, location: api_v1_rank_url(@rank.id)
         else
           render json: @rank.errors, status: :unprocessable_entity
         end
@@ -41,15 +43,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_rank
-          @rank = Rank.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def rank_params
-          params.require(:rank).permit(:name)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_rank
+        @rank = Rank.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def rank_params
+        params.require(:rank).permit(:name)
+      end
     end
   end
 end

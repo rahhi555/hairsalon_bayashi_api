@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
 class Stylist < ApplicationRecord
-  belongs_to :rank
+  has_many :appointments, dependent: :restrict_with_error
+  belongs_to :rank, optional: true
 end

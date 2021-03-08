@@ -1,13 +1,19 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class CustomersController < ApplicationController
-      before_action :set_customer, only: [:show, :update, :destroy]
+      before_action :set_customer, only: %i[show update destroy]
 
       # GET /customers
       def index
-        @customers = Customer.all
-
-        render json: @customers
+        if params[:uid]
+          current_user = Customer.find_by(uid: params[:uid])
+          render json: current_user
+        else
+          @customers = Customer.all
+          render json: @customers
+        end
       end
 
       # GET /customers/1
@@ -20,7 +26,7 @@ module Api
         @customer = Customer.new(customer_params)
 
         if @customer.save
-          render json: @customer, status: :created, location: api_v1_appointments_url
+          render json: @customer, status: :created, location: api_v1_appointment_url(@customer.id)
         else
           render json: @customer.errors, status: :unprocessable_entity
         end
@@ -41,15 +47,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_customer
-          @customer = Customer.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def customer_params
-          params.require(:customer).permit(:number, :name, :tel, :mail)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_customer
+        @customer = Customer.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def customer_params
+        params.require(:customer).permit(:number, :name, :tel, :mail, :uid)
+      end
     end
   end
 end

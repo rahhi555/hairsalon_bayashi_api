@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class StylistsController < ApplicationController
-      before_action :set_stylist, only: [:show, :update, :destroy]
+      before_action :set_stylist, only: %i[show update destroy]
 
       # GET /stylists
       def index
@@ -20,7 +22,7 @@ module Api
         @stylist = Stylist.new(stylist_params)
 
         if @stylist.save
-          render json: @stylist, status: :created, location: @stylist
+          render json: @stylist, status: :created, location: api_v1_stylist_url(@stylist.id)
         else
           render json: @stylist.errors, status: :unprocessable_entity
         end
@@ -41,15 +43,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_stylist
-          @stylist = Stylist.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def stylist_params
-          params.require(:stylist).permit(:rank_id, :name, :is_male, :nickname, :hire_on)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_stylist
+        @stylist = Stylist.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def stylist_params
+        params.require(:stylist).permit(:rank_id, :name, :is_male, :nickname, :hire_on)
+      end
     end
   end
 end
