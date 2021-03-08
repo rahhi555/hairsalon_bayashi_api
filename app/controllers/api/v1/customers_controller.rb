@@ -7,9 +7,13 @@ module Api
 
       # GET /customers
       def index
-        @customers = Customer.all
-
-        render json: @customers
+        if params[:uid]
+          current_user = Customer.find_by(uid: params[:uid])
+          render json: current_user
+        else
+          @customers = Customer.all
+          render json: @customers
+        end
       end
 
       # GET /customers/1
