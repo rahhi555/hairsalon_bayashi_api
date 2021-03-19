@@ -7,9 +7,13 @@ module Api
 
       # GET /stylists
       def index
-        @stylists = Stylist.all
-
-        render json: @stylists
+        if params[:uid]
+          current_user = Stylist.find_by(uid: params[:uid])
+          render json: current_user
+        else
+          @stylists = Stylist.all
+          render json: @stylists
+        end
       end
 
       # GET /stylists/1
@@ -51,7 +55,8 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def stylist_params
-        params.require(:stylist).permit(:rank_id, :name, :is_male, :nickname, :hire_on)
+        params.require(:stylist).permit(:rank_id, :name, :is_male, :nickname, :hire_on,
+                                        :uid, :mail, :tel)
       end
     end
   end

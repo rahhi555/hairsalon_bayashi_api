@@ -5,7 +5,21 @@ module Api
 
       # GET /prices
       def index
-        @prices = Price.all
+        sql = <<-"EOS"
+                SELECT
+                  menus.id AS menu_id,
+                  menus.name AS menu_name,
+                  ranks.id AS rank_id,
+                  ranks.name AS rank_name,
+                  prices.id AS price_id,
+                  prices.price AS price
+                FROM
+                  menus
+                LEFT JOIN prices ON menus.id = prices.menu_id
+                LEFT JOIN ranks ON ranks.id = prices.rank_id
+                ORDER BY menu_name, rank_name
+              EOS
+        @prices = ActiveRecord::Base.connection.select_all(sql)
 
         render json: @prices
       end
@@ -20,7 +34,7 @@ module Api
         @price = Price.new(price_params)
 
         if @price.save
-          render json: @price, status: :created, location: @price
+          render json: @price, status: :created, location: api_v1_price_url(@price.id)
         else
           render json: @price.errors, status: :unprocessable_entity
         end
