@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_032959) do
+ActiveRecord::Schema.define(version: 2021_03_20_002430) do
 
   create_table "appointments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "customer_id", null: false
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_032959) do
   create_table "prices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "rank_id", null: false
     t.bigint "menu_id", null: false
-    t.integer "price", null: false
+    t.integer "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["menu_id"], name: "index_prices_on_menu_id"

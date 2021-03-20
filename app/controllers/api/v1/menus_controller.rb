@@ -20,6 +20,10 @@ module Api
       # POST /menus
       def create
         @menu = Menu.new(menu_params)
+        # ランクに紐付いたすべての中間テーブルを作成するために全id取得
+        rank_ids = Rank.ids
+        # priceを全ランク分作成する
+        price_builds = rank_ids.map{ |rank_id| @menu.prices.build(rank_id: rank_id) }
 
         if @menu.save
           render json: @menu, status: :created, location: api_v1_menu_url(@menu.id)
