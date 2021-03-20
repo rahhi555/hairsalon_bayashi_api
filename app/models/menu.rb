@@ -2,7 +2,9 @@
 
 class Menu < ApplicationRecord
   has_and_belongs_to_many :appointments
-  has_many :prices, dependent: :restrict_with_error
+  has_many :prices, dependent: :destroy
+  accepts_nested_attributes_for :prices
+
   has_many :ranks, through: :prices
 
   validates :name, presence: true, uniqueness: true
