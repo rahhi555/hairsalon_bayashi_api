@@ -5,6 +5,7 @@ module Api
 
       # GET /prices
       def index
+        # メニュー、料金及びランクの一覧表を取得する
         sql = <<-"EOS"
                 SELECT
                   menus.id AS menu_id,

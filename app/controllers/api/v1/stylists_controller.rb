@@ -11,7 +11,7 @@ module Api
           current_user = Stylist.find_by(uid: params[:uid])
           render json: current_user
         else
-          @stylists = Stylist.all
+          @stylists = Stylist.left_outer_joins(:rank).select('stylists.*, ranks.name AS ranks_name')
           render json: @stylists
         end
       end
