@@ -8,6 +8,16 @@ module Api
       # GET /menus
       def index
         @menus = Menu.all
+        
+        render json: @menus
+      end
+      
+      # GET /menus/base 基準金額のメニュー
+      def base
+        # 一番低いランクの料金が基準値なので、最低ランクのidを取得
+        lowest_rank = Rank.order(name: :desc).pluck(:id).first
+        # メニューのうち最低ランクの料金との組み合わせを取得
+        @menus = Menu.joins(:prices).where('prices.rank_id' => lowest_rank).select('menus.*, prices.price')
 
         render json: @menus
       end
