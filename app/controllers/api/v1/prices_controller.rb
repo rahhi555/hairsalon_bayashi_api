@@ -25,6 +25,19 @@ module Api
         render json: @prices
       end
 
+      # GET /prices/base 基準金額のメニュー
+      def base
+        # 一番低いランクの料金が基準値なので、最低ランクのidを取得
+        lowest_rank = Rank.order(name: :desc).pluck(:id).first
+        # メニューのうち最低ランクの料金との組み合わせを取得
+        @prices = Price
+                  .joins(:menu)
+                  .where('prices.rank_id' => lowest_rank)
+                  .select('prices.id, menus.name, menus.time, prices.price')
+
+        render json: @prices
+      end
+
       # GET /prices/1
       def show
         render json: @price

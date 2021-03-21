@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
   namespace 'api' do
     namespace 'v1' do
-      resources :prices
-      resources :menus do
+      # 基準料金を求めるルート
+      resources :prices do
         collection do
           get 'base'
         end
       end
+      resources :menus
       resources :stylists
       resources :ranks
       resources :appointments
