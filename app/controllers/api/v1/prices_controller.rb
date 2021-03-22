@@ -1,7 +1,7 @@
 module Api
   module V1
     class PricesController < ApplicationController
-      before_action :set_price, only: [:show, :update, :destroy]
+      before_action :set_price, only: [:show, :update, :destroy, :order_stylist]
 
       # GET /prices
       def index
@@ -36,6 +36,45 @@ module Api
                   .select('prices.id, menus.name, menus.time, prices.price')
 
         render json: @prices
+      end
+
+      # GET /prices/order_stylist 予約時のスタイリスト選択
+      def order_stylist
+        # 既存の予約とダブらないようにスタイリストと埋まっている時間の組み合わせを取得
+        reserveds = Appointment.joins(:menus).select('appointments.stylist_id, appointments.appointment_on, menus.time')
+        # 予約日時から作業終了までの時間を算出
+        already_apo_times = reserveds.map{|reserved|
+          start_time = reserved.appointment_on
+          # menus.timeで帰ってくる時間がUTCだったので、日本時間にコンバートする
+          menu_time = reserved.time.in_time_zone('Tokyo')
+          menu_time_hour = menu_time.hour
+          menu_time_minutes = menu_time.min
+          # 予約時間から所要時間分進めることで、終わりの時間を取得
+          finish_time = start_time.advance(hours: menu_time_hour, minutes: menu_time_minutes)
+          # スタイリストid及び作業開始時刻と終了時間を返す
+          { stylist_id: reserved.stylist_id, start_time: start_time, finish_time: finish_time }
+        }
+        
+        # 予約希望時間をクエリパラメータで受け取る。Time.parseで変換しないと比較できないので注意
+        new_apo_on = Time.parse(params[:appointmentOn])
+
+        # 予約希望時間と現在の予約を比較して、対応可能なスタイリストのみを返す(最後にcompactを入れないとnilが入ってしまう)。
+        free_stylists = already_apo_times.map{|apo|
+          next if new_apo_on.between?(apo[:start_time], apo[:finish_time])
+          apo[:stylist_id]
+        }.compact
+        
+        # メニューはprice.idを渡された時点で確定
+        @menu_id = @price.menu.id
+
+        # メニューに対する予約可能なスタイリスト名、ランク、指名料を取得
+        @order_stylists =
+        Rank
+        .joins(:stylists, :prices)
+        .where("prices.menu_id = ? AND stylists.id IN (?)",@menu_id, free_stylists)
+        .select('stylists.id, stylists.name AS stylist_name, ranks.name AS rank_name, prices.price AS price')
+        
+        render json: { order_stylists: @order_stylists, menu_id: @menu_id }
       end
 
       # GET /prices/1
