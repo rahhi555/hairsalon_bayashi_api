@@ -8,7 +8,7 @@ Rails.application.routes.draw do
         end
         member do
           # 予約時スタイリスト選択
-          get 'order_stylist'
+          get 'order_stylists'
         end
       end
       resources :menus
