@@ -1,7 +1,7 @@
 module Api
   module V1
     class PricesController < ApplicationController
-      before_action :set_price, only: [:show, :update, :destroy, :order_stylist]
+      before_action :set_price, only: [:show, :update, :destroy, :order_stylists]
 
       # GET /prices
       def index
@@ -39,7 +39,8 @@ module Api
       end
 
       # GET /prices/order_stylist 予約時のスタイリスト選択
-      def order_stylist
+      def order_stylists
+        p @price
         # 既存の予約とダブらないようにスタイリストと埋まっている時間の組み合わせを取得
         reserveds = Appointment.joins(:menus).select('appointments.stylist_id, appointments.appointment_on, menus.time')
         # 予約日時から作業終了までの時間を算出
@@ -57,21 +58,23 @@ module Api
         
         # 予約希望時間をクエリパラメータで受け取る。Time.parseで変換しないと比較できないので注意
         new_apo_on = Time.parse(params[:appointmentOn])
-
-        # 予約希望時間と現在の予約を比較して、対応可能なスタイリストのみを返す(最後にcompactを入れないとnilが入ってしまう)。
+        
+        # 予約希望時間と現在の予約を比較して、対応不可能なスタイリストのidを返す(最後にcompactを入れないとnilが入ってしまう)。
         free_stylists = already_apo_times.map{|apo|
-          next if new_apo_on.between?(apo[:start_time], apo[:finish_time])
+          next unless new_apo_on.between?(apo[:start_time], apo[:finish_time])
           apo[:stylist_id]
         }.compact
+        # もしfree_stylistsが空配列ならば後のNOT IN で該当なしになってしまうので、空文字を代入する
+        free_stylists = '' if free_stylists.empty?
         
         # メニューはprice.idを渡された時点で確定
-        @menu_id = @price.menu.id
+        @menu_id = @price.menu_id
 
         # メニューに対する予約可能なスタイリスト名、ランク、指名料を取得
         @order_stylists =
         Rank
         .joins(:stylists, :prices)
-        .where("prices.menu_id = ? AND stylists.id IN (?)",@menu_id, free_stylists)
+        .where("prices.menu_id = ? AND stylists.id NOT IN (?)",@menu_id, free_stylists)
         .select('stylists.id, stylists.name AS stylist_name, ranks.name AS rank_name, prices.price AS price')
         
         render json: { order_stylists: @order_stylists, menu_id: @menu_id }
