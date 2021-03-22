@@ -7,22 +7,8 @@ module Api
 
       # GET /ranks
       def index
-        # @ranks = Rank.all
-        @reserveds = Appointment.joins(:menus).select('appointments.id, menus.id AS menu_id, appointments.appointment_on, menus.time')
-        @ranks = @reserveds.map{|reserved|
-          start_time = reserved.appointment_on
-          puts start_time
-          menu_time = reserved.time.in_time_zone('Tokyo')
-          puts menu_time
-          menu_time_hour = menu_time.hour
-          puts menu_time_hour
-          menu_time_minutes = menu_time.min
-          puts menu_time_minutes
-          # 予約時間から所要時間分進めることで、終わりの時間を取得
-          finish_time = start_time.advance(hours: menu_time_hour, minutes: menu_time_minutes)
-          puts finish_time
-          { start_time: start_time, finish_time: finish_time }
-        }        
+        @ranks = Rank.all
+ 
         render json: @ranks
       end
 
