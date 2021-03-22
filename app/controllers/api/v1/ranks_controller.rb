@@ -8,7 +8,7 @@ module Api
       # GET /ranks
       def index
         @ranks = Rank.all
-
+ 
         render json: @ranks
       end
 
