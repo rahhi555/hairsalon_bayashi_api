@@ -40,7 +40,6 @@ module Api
 
       # GET /prices/order_stylist 予約時のスタイリスト選択
       def order_stylists
-        p @price
         # 既存の予約とダブらないようにスタイリストと埋まっている時間の組み合わせを取得
         reserveds = Appointment.joins(:menus).select('appointments.stylist_id, appointments.appointment_on, menus.time')
         # 予約日時から作業終了までの時間を算出
@@ -77,7 +76,10 @@ module Api
         .where("prices.menu_id = ? AND stylists.id NOT IN (?)",@menu_id, free_stylists)
         .select('stylists.id, stylists.name AS stylist_name, ranks.name AS rank_name, prices.price AS price')
         
-        render json: { order_stylists: @order_stylists, menu_id: @menu_id }
+        render json: { 
+          order_stylists: @order_stylists,
+          menu_id: @menu_id
+        }
       end
 
       # GET /prices/1

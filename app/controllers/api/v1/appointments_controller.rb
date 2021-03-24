@@ -20,8 +20,10 @@ module Api
       # POST /appointments
       def create
         @appointment = Appointment.new(appointment_params)
-
-        if @appointment.save
+        menu = Menu.find_by!(menu_id_params)
+        
+        @appointment.menus << menu
+        if @appointment.save!
           render json: @appointment, status: :created, location: api_v1_appointment_url(@appointment.id)
         else
           render json: @appointment.errors, status: :unprocessable_entity
@@ -52,6 +54,11 @@ module Api
       # Only allow a list of trusted parameters through.
       def appointment_params
         params.require(:appointment).permit(:customer_id, :stylist_id, :appointment_on, :remark)
+      end
+
+      # createで新規追加する際、リレーション先のmenuも追加するためのparams
+      def menu_id_params
+        params.require(:menu_id).permit(:id)
       end
     end
   end
