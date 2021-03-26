@@ -7,9 +7,23 @@ module Api
 
       # GET /appointments
       def index
-        @appointments = Appointment.all
+        appointments =
+          Appointment
+          .joins(:stylist)
+          .select('appointments.id,appointments.remark,stylists.name AS stylist_name')
+          .order(:id)
 
-        render json: @appointments
+        already_apo_times = get_start_finish_time
+        
+        @union_appointments = []
+        
+        appointments.each do |apo|
+          tmp = already_apo_times.find_all {|apo_time| apo_time[:id] == apo[:id] }
+          new_apo = { appointment: apo, start_end_time: tmp }
+          @union_appointments.push(new_apo)
+        end
+        
+        render json: { union_appointments: @union_appointments }
       end
 
       # GET /appointments/1
@@ -21,7 +35,7 @@ module Api
       def create
         @appointment = Appointment.new(appointment_params)
         menu = Menu.find_by!(menu_id_params)
-        
+
         @appointment.menus << menu
         if @appointment.save!
           render json: @appointment, status: :created, location: api_v1_appointment_url(@appointment.id)

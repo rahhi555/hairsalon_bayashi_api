@@ -40,20 +40,8 @@ module Api
 
       # GET /prices/order_stylist 予約時のスタイリスト選択
       def order_stylists
-        # 既存の予約とダブらないようにスタイリストと埋まっている時間の組み合わせを取得
-        reserveds = Appointment.joins(:menus).select('appointments.stylist_id, appointments.appointment_on, menus.time')
-        # 予約日時から作業終了までの時間を算出
-        already_apo_times = reserveds.map{|reserved|
-          start_time = reserved.appointment_on
-          # menus.timeで帰ってくる時間がUTCだったので、日本時間にコンバートする
-          menu_time = reserved.time.in_time_zone('Tokyo')
-          menu_time_hour = menu_time.hour
-          menu_time_minutes = menu_time.min
-          # 予約時間から所要時間分進めることで、終わりの時間を取得
-          finish_time = start_time.advance(hours: menu_time_hour, minutes: menu_time_minutes)
-          # スタイリストid及び作業開始時刻と終了時間を返す
-          { stylist_id: reserved.stylist_id, start_time: start_time, finish_time: finish_time }
-        }
+        # application_controllerのメソッド。全スタイリストの予約済みの作業開始時間と終了時間が帰ってくる。   
+        already_apo_times = get_start_finish_time
         
         # 予約希望時間をクエリパラメータで受け取る。Time.parseで変換しないと比較できないので注意
         new_apo_on = Time.parse(params[:appointmentOn])
