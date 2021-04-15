@@ -2,6 +2,6 @@
 
 class AddUidToCustomers < ActiveRecord::Migration[6.1]
   def change
-    change_column_null :customers, :uid, false
+    add_column :stylists, :uid, :string, null: false
   end
 end

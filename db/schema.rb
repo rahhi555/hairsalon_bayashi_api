@@ -39,8 +39,6 @@ ActiveRecord::Schema.define(version: 2021_03_20_002430) do
     t.string "uid", null: false
     t.index ["mail"], name: "index_customers_on_mail", unique: true
     t.index ["tel"], name: "index_customers_on_tel", unique: true
-    t.check_constraint "egexp_like(`mail`,_utf8mb4\\'^[A-Z0-9._%-]+@[A-Z0-9.-]+.[A-Z]{2,4}$\\'", name: "only_mail_address"
-    t.check_constraint "egexp_like(`tel`,_utf8mb4\\'^0[[:digit:]]{9,10}$\\'", name: "only_phone_number"
   end
 
   create_table "menus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -64,7 +62,7 @@ ActiveRecord::Schema.define(version: 2021_03_20_002430) do
   end
 
   create_table "ranks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_ranks_on_name", unique: true
@@ -78,9 +76,9 @@ ActiveRecord::Schema.define(version: 2021_03_20_002430) do
     t.date "hire_on", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "uid", null: false
     t.string "tel", null: false
     t.string "mail", null: false
-    t.string "uid", null: false
     t.index ["rank_id"], name: "index_stylists_on_rank_id"
     t.check_constraint "egexp_like(`mail`,_utf8mb4\\'^[A-Z0-9._%-]+@[A-Z0-9.-]+.[A-Z]{2,4}$\\'", name: "stylists_only_mail_address"
     t.check_constraint "egexp_like(`tel`,_utf8mb4\\'^0[[:digit:]]{9,10}$\\'", name: "stylists_only_phone_number"
