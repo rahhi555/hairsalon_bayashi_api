@@ -41,6 +41,5 @@ jobs:
           bundle exec rails db:migrate
           
       - name: run rspec
-        run: |
-          pwd
+        run:
           bundle exec rspec ./spec/requests/ranks_spec.rb
