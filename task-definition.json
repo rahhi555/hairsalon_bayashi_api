@@ -111,6 +111,10 @@
         {
           "valueFrom": "/db/raw/password",
           "name": "APP_DATABASE_PASSWORD"
+        },
+        {
+          "name": "RAILS_MASTER_KEY",
+          "valueFrom": "/web/rails-master-key"
         }
       ],
       "dockerSecurityOptions": null,

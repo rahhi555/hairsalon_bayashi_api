@@ -4,6 +4,7 @@ set -e
 echo $FRONT_URL
 echo $RAILS_DB_HOST
 echo $APP_DATABASE_PASSWORD
+echo $RAILS_MASTER_KEY
 
 cd $APP_ROOT
 

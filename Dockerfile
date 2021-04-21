@@ -17,7 +17,4 @@ RUN chmod +x $APP_ROOT/entrypoint.sh
 
 RUN bundle install
 
-RUN rm ./config/credentials.yml.enc
-RUN EDITOR=vim rails credentials:edit
-
 ENTRYPOINT ["/app/entrypoint.sh"]
