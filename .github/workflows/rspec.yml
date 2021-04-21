@@ -43,4 +43,4 @@ jobs:
       - name: run rspec
         run: |
           pwd
-          bundle exec rspec
+          bundle exec rspec ./spec/requests/ranks_spec.rb
