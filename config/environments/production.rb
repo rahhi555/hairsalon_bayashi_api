@@ -94,4 +94,5 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   config.hosts << 'www.hirabayashi.work'
+  config.hosts << 'hair-salon-bayashi-2108613926.ap-northeast-1.elb.amazonaws.com'
 end
