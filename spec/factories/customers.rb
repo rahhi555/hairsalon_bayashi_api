@@ -5,24 +5,28 @@ FactoryBot.define do
     name { '田中　太郎' }
     tel { '09088887777' }
     mail { 'mail@example.com' }
+    uid { 'dammyuid1' }
   end
 
   factory :invalid_customer, class: 'Customer' do
     name { '' }
     tel  { '' }
     mail { '' }
+    uid { '' }
   end
 
   factory :update_customer, class: 'Customer' do
     name { '田中　次郎' }
     tel  { '09088886666' }
     mail { 'mail@ezweb.ne.jp' }
+    uid { 'dammyuid2' }
   end
 
   factory :invalid_customers, class: 'Customer' do
     name { '田中　三郎' }
     tel  { '09088885555' }
     mail { 'mail@yahoo.co.jp' }
+    uid { 'dammyuid3' }
 
     trait :name_is_blank do
       name { '' }

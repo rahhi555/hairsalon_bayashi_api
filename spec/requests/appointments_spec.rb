@@ -25,7 +25,14 @@ RSpec.describe '/appointments', type: :request do
   end
 
   let(:invalid_attributes) do
-    attributes_for(:invalid_appointment)
+    customer = create(:customer)
+    stylist = create(:stylist)
+    attributes_for(:invalid_appointment, customer_id: customer.id, stylist_id: stylist.id)
+  end
+
+  let(:menu_params) do
+    menu = create(:menu)
+    { id: menu.id }
   end
 
   # This should return the minimal set of values that should be in the headers
@@ -57,14 +64,14 @@ RSpec.describe '/appointments', type: :request do
       it 'creates a new Appointment' do
         expect do
           post api_v1_appointments_url,
-               params: { appointment: valid_attributes },
+               params: { appointment: valid_attributes, menu_id: menu_params },
                headers: valid_headers, as: :json
         end.to change(Appointment, :count).by(1)
       end
 
       it 'renders a JSON response with the new appointment' do
         post api_v1_appointments_url,
-             params: { appointment: valid_attributes }, headers: valid_headers, as: :json
+             params: { appointment: valid_attributes, menu_id: menu_params }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including('application/json'))
       end
@@ -74,16 +81,10 @@ RSpec.describe '/appointments', type: :request do
       it 'does not create a new Appointment' do
         expect do
           post api_v1_appointments_url,
-               params: { appointment: invalid_attributes }, as: :json
-        end.to change(Appointment, :count).by(0)
+               params: { appointment: invalid_attributes, menu_id: menu_params }, as: :json
+        end.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it 'renders a JSON response with errors for the new appointment' do
-        post api_v1_appointments_url,
-             params: { appointment: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including('application/json'))
-      end
     end
   end
 
@@ -111,16 +112,6 @@ RSpec.describe '/appointments', type: :request do
         patch api_v1_appointment_url(appointment),
               params: { appointment: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-      end
-    end
-
-    context 'with invalid parameters' do
-      it 'renders a JSON response with errors for the appointment' do
-        appointment = Appointment.create! valid_attributes
-        patch api_v1_appointment_url(appointment),
-              params: { appointment: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
