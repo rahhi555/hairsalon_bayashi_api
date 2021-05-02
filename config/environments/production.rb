@@ -93,6 +93,7 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-  config.hosts << 'www.hirabayashi.work'
-  config.hosts << 'hair-salon-bayashi-2108613926.ap-northeast-1.elb.amazonaws.com'
+
+  config.hosts << ENV.fetch('FRONT_URL', 'http://localhost')
+  config.hosts << ENV.fetch('RAILS_DB_HOST', 'http://localhost:3306')
 end
