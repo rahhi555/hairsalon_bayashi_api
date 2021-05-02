@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 6.1.3.1'
+gem 'rails', '~> 6.1', '>= 6.1.3'
 # Use mysql as the database for Active Record
 gem 'mysql2', '~> 0.5'
 # Use Puma as the app server
@@ -22,7 +22,7 @@ group :development, :test do
   gem 'byebug',     platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rbs_rails', require: false
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 4.0', '>= 4.0.2'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false

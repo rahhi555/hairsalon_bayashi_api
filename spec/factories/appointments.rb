@@ -7,9 +7,7 @@ FactoryBot.define do
   end
 
   factory :invalid_appointment, class: 'Appointment' do
-    customer_id { '' }
-    stylist_id { '' }
-    appointment_on { '2021-02-20 18:39:00' }
+    appointment_on { '' }
     remark { 'MyText' }
   end
 
