@@ -20,9 +20,9 @@ jobs:
 
     - name: tmp2
       run: |
-        echo "${{toJSON(github.event.head_commit.merged_by)}}"
-        echo "github.event.head_commit"
-        echo "github.event.head_commit.mergied_by"
+        echo "github.event.merged_by: ${{toJSON(github.event.merged_by)}}"
+        echo "github.event.commit[0]: ${{toJSON(github.event.commit[0])}}"
+        echo "github.event.head_commit: ${{toJSON(github.event.head_commit)}}"
         echo "[skip ecs] ${{ contains(github.event.commits[0].message, '[skip ecs]') }}"
 
 #    - name: Checkout
