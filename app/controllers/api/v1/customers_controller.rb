@@ -9,16 +9,16 @@ module Api
       def index
         if params[:uid]
           current_user = Customer.find_by(uid: params[:uid])
-          render json: current_user
+          render json: current_user, methods: [:image_url]
         else
           @customers = Customer.all
-          render json: @customers
+          render json: @customers, methods: [:image_url]
         end
       end
 
       # GET /customers/1
       def show
-        render json: @customer
+        render json: @customer, methods: [:image_url]
       end
 
       # POST /customers
@@ -26,7 +26,10 @@ module Api
         @customer = Customer.new(customer_params)
 
         if @customer.save
-          render json: @customer, status: :created, location: api_v1_appointment_url(@customer.id)
+          render json: @customer,
+                 methods: [:image_url],
+                 status: :created,
+                 location: api_v1_appointment_url(@customer.id)
         else
           render json: @customer.errors, status: :unprocessable_entity
         end
@@ -35,7 +38,7 @@ module Api
       # PATCH/PUT /customers/1
       def update
         if @customer.update(customer_params)
-          render json: @customer
+          render json: @customer, methods: [:image_url]
         else
           render json: @customer.errors, status: :unprocessable_entity
         end
@@ -55,7 +58,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def customer_params
-        params.require(:customer).permit(:number, :name, :tel, :mail, :uid)
+        params.require(:customer).permit(:name, :tel, :mail, :uid, :image)
       end
     end
   end

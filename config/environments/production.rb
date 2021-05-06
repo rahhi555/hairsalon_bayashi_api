@@ -96,4 +96,6 @@ Rails.application.configure do
 
   config.hosts << ENV.fetch('FRONT_URL', 'http://localhost')
   config.hosts << ENV.fetch('RAILS_DB_HOST', 'http://localhost:3306')
+
+  config.active_storage.service = :amazon
 end

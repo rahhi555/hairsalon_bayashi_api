@@ -58,4 +58,10 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
   config.hosts << 'web'
   config.hosts << 'host.docker.internal'
+
+  # Active Storage用の設定。config/storage.ymlの:localを使用する
+  config.active_storage.service = :local
+  # Active Storage用の設定。
+  Rails.application.routes.default_url_options[:host] = 'localhost'
+  Rails.application.routes.default_url_options[:port] = 3000
 end

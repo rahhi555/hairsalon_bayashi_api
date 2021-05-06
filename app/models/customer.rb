@@ -2,6 +2,13 @@
 
 class Customer < ApplicationRecord
   has_many :appointments, dependent: :destroy
+  # Active Storage を使用するための関連付け
+  has_one_attached :image
+
+  def image_url
+    # 紐付いている画像のURLを取得する
+    image.attached? ? Rails.application.routes.url_helpers.url_for(image) : nil
+  end
 
   VALID_NAME_REGEX = /\A[^\s　]+　[^\s　]+\z/
 
