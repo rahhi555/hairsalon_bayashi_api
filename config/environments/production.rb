@@ -94,8 +94,8 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  config.hosts << ENV.fetch('FRONT_URL', 'http://localhost')
-  config.hosts << ENV.fetch('RAILS_DB_HOST', 'http://localhost:3306')
-
+  # config.hosts << ENV.fetch('FRONT_URL', 'http://localhost')
+  # config.hosts << ENV.fetch('RAILS_DB_HOST', 'http://localhost:3306')
+  config.hosts.clear
   config.active_storage.service = :amazon
 end
