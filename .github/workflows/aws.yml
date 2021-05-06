@@ -7,8 +7,8 @@ on:
 name: Deploy to Amazon ECS WEB
 
 jobs:
-  deploy:
-    name: Deploy
+  ECR-deploy:
+    name: ECR-Deploy
     runs-on: ubuntu-latest
     environment: production
     if: github.event.pull_request.merged == true
@@ -37,10 +37,17 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+
+  ECS-deploy:
+    name: ECS-deploy
+    needs: ECR-deploy
+    runs-on: ubuntu-latest
+    environment: production
+    if: "!contains(github.event.head_commit.message, '[skip ecs]')"
+
     steps:
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      if: "!contains(github.event.head_commit.message, '[skip ecs]')"
       with:
         task-definition: task-definition.json
         service: hair_salon_bayashi_service
