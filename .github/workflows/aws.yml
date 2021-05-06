@@ -20,9 +20,9 @@ jobs:
 
     - name: tmp2
       run: |
-        echo "github.event.pull_request: ${{toJSON(github.event.pull_request)}}"
-        echo "github.event.pull_request: ${{github.event.pull_request}}"
-        echo "[skip ecs] ${{ contains(github.event.commits[0].message, '[skip ecs]') }}"
+        echo "github.event.pull_request: ${{toJSON(github.event.pull_request.title)}}"
+        echo "github.event.pull_request: ${{github.event.pull_request.title}}"
+        echo "[skip ecs] ${{ contains(github.event.pull_request.title, '[skip ecs]') }}"
 
 #    - name: Checkout
 #      uses: actions/checkout@v2
