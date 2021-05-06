@@ -44,6 +44,10 @@
         {
           "valueFrom": "/front/browserBaseURL",
           "name": "BROWSER_BASE_URL"
+        },
+        {
+          "valueFrom": "/front/serverMiddlewareUrl",
+          "name": "SERVER_MIDDLEWARE_URL"
         }
       ],
       "dockerSecurityOptions": null,
