@@ -16,8 +16,8 @@ jobs:
     steps:
     - name: tmp
       run: |
-        echo "${{ github.event.head_commit.message }}"
-        echo "[skip ecs] ${{ contains(github.event.head_commit.message, '[skip ecs]') }}"
+        echo "${{ github.event.commits[0].message }}"
+        echo "[skip ecs] ${{ contains(github.event.commits[0].message, '[skip ecs]') }}"
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -48,7 +48,7 @@ jobs:
     needs: ECR-deploy
     runs-on: ubuntu-latest
     environment: production
-    if: contains(github.event.head_commit.message, '[skip ecs]') == false
+    if: contains(github.event.commits[0].message, '[skip ecs]') == false
 
     steps:
     - name: Checkout
