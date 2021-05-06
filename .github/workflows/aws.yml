@@ -16,11 +16,6 @@ jobs:
     steps:
     - name: tmp
       run: |
-        echo "${{toJSON(github.event)}}"
-
-    - name: tmp2
-      run: |
-        echo "github.event.pull_request: ${{toJSON(github.event.pull_request.title)}}"
         echo "github.event.pull_request: ${{github.event.pull_request.title}}"
         echo "[skip ecs] ${{ contains(github.event.pull_request.title, '[skip ecs]') }}"
 
