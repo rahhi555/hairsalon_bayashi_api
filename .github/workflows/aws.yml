@@ -11,8 +11,9 @@ jobs:
     name: ECR-Deploy
     runs-on: ubuntu-latest
     environment: production
-    if: github.event.pull_request.merged == true
-
+#    if: github.event.pull_request.merged == true
+    if: contains(github.event.pull_request.title, '[skip ecs]') == false
+    
     steps:
     - name: tmp
       run: |
