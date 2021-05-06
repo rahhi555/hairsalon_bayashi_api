@@ -17,58 +17,63 @@ jobs:
     - name: tmp
       run: |
         echo "${{toJSON(github.event)}}"
+
+    - name: tmp2
+      run: |
+        echo "${{toJSON(github.event.head_commit)}}"
+        echo "${{github.event.head_commit}}"
         echo "[skip ecs] ${{ contains(github.event.commits[0].message, '[skip ecs]') }}"
 
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: hairsalon-bayashi-web
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest"
-
-  ECS-deploy:
-    name: ECS-deploy
-    needs: ECR-deploy
-    runs-on: ubuntu-latest
-    environment: production
-    if: contains(github.event.commits[0].message, '[skip ecs]') == false
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: task-definition.json
-        service: hair_salon_bayashi_service
-        cluster: hair_salon_bayashi
-        wait-for-service-stability: true
+#    - name: Checkout
+#      uses: actions/checkout@v2
+#
+#    - name: Configure AWS credentials
+#      uses: aws-actions/configure-aws-credentials@v1
+#      with:
+#        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        aws-region: ap-northeast-1
+#
+#    - name: Login to Amazon ECR
+#      id: login-ecr
+#      uses: aws-actions/amazon-ecr-login@v1
+#
+#    - name: Build, tag, and push image to Amazon ECR
+#      id: build-image
+#      env:
+#        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#        ECR_REPOSITORY: hairsalon-bayashi-web
+#      run: |
+#        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+#        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+#        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+#
+#  ECS-deploy:
+#    name: ECS-deploy
+#    needs: ECR-deploy
+#    runs-on: ubuntu-latest
+#    environment: production
+#    if: contains(github.event.commits[0].message, '[skip ecs]') == false
+#
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v2
+#
+#    - name: Configure AWS credentials
+#      uses: aws-actions/configure-aws-credentials@v1
+#      with:
+#        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        aws-region: ap-northeast-1
+#
+#    - name: Login to Amazon ECR
+#      id: login-ecr
+#      uses: aws-actions/amazon-ecr-login@v1
+#
+#    - name: Deploy Amazon ECS task definition
+#      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#      with:
+#        task-definition: task-definition.json
+#        service: hair_salon_bayashi_service
+#        cluster: hair_salon_bayashi
+#        wait-for-service-stability: true
