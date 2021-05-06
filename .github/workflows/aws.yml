@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: tmp
       run: |
-        echo "${{ github.event.commits[0].message }}"
+        echo "${{toJSON(github.event)}}"
         echo "[skip ecs] ${{ contains(github.event.commits[0].message, '[skip ecs]') }}"
 
     - name: Checkout
