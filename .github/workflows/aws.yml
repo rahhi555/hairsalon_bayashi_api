@@ -40,7 +40,7 @@ jobs:
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      if: contains(github.event.head_commit.message, '[skip ecs]') == false
+      if: "!contains(github.event.head_commit.message, '[skip ecs]')"
       with:
         task-definition: task-definition.json
         service: hair_salon_bayashi_service
