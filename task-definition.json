@@ -113,8 +113,8 @@
           "name": "APP_DATABASE_PASSWORD"
         },
         {
-          "name": "RAILS_MASTER_KEY",
-          "valueFrom": "/web/rails-master-key"
+          "valueFrom": "/web/rails-master-key",
+          "name": "RAILS_MASTER_KEY"
         }
       ],
       "dockerSecurityOptions": null,
