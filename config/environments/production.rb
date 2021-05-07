@@ -98,6 +98,6 @@ Rails.application.configure do
   # config.hosts << ENV.fetch('RAILS_DB_HOST', 'http://localhost:3306')
   config.hosts.clear
   config.active_storage.service = :amazon
-  Rails.application.routes.default_url_options[:host] = ENV.fetch('FRONT_URL', 'https://www.hirabayashi.work')
-  Rails.application.routes.default_url_options[:port] = 443
+  Rails.application.routes.default_url_options[:host] = 'localhost'
+  Rails.application.routes.default_url_options[:port] = 3000
 end
