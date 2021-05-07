@@ -100,6 +100,6 @@ Rails.application.configure do
   config.hosts.clear
   config.active_storage.service = :amazon
   Rails.application.routes.default_url_options[:protocol] = 'https'
-  Rails.application.routes.default_url_options[:host] = 'localhost'
+  Rails.application.routes.default_url_options[:host] = 'www.hirabayashi.work'
   Rails.application.routes.default_url_options[:port] = 3000
 end
