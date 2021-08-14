@@ -10,7 +10,6 @@ jobs:
     env:
       RAILS_ENV: test
       RAILS_DB_HOST: 127.0.0.1
-      APP_DATABASE_PASSWORD: password
     services:
       db:
         image: mysql:8.0.23
