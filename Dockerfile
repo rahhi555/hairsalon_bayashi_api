@@ -17,4 +17,4 @@ RUN chmod +x $APP_ROOT/entrypoint.sh
 
 RUN bundle install
 
-#ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
